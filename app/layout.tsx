@@ -1,17 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Toaster } from "sonner"; // 1. Import the Toaster
+import { Toaster } from "sonner";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// We are removing the Google Font import to bypass the Turbopack bug
 
 export const metadata: Metadata = {
   title: "NaturaPick | Admin Dashboard",
@@ -25,13 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      {/* We use standard system font classes that don't require network requests or local loaders */}
+      <body className="antialiased font-sans">
         {children}
-        
-        {/* 2. Place Toaster here so it's available globally */}
-        <Toaster 
-          position="top-center" 
-          richColors 
+        <Toaster
+          position="top-center"
+          richColors
           closeButton
           expand={false}
           theme="light"

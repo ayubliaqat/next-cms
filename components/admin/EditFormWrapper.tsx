@@ -15,12 +15,16 @@ export default function EditFormWrapper({ id, initialData }: any) {
     setIsSubmitting(true);
     try {
       const result = await updateBlogPost(id, data);
+
       if (result.success) {
         toast.success("Post updated successfully!");
         router.push("/admin/dashboard/blog");
         router.refresh();
       } else {
-        toast.error(result.error);
+        // Use 'message' or a fallback since 'error' is not guaranteed to exist on the type
+        toast.error(
+          "message" in result ? result.message : "Failed to update post"
+        );
       }
     } catch (err) {
       toast.error("Something went wrong");
@@ -30,10 +34,10 @@ export default function EditFormWrapper({ id, initialData }: any) {
   };
 
   return (
-    <BlogForm 
-      initialData={initialData} 
-      onSubmit={handleSubmit} 
-      isSubmitting={isSubmitting} 
+    <BlogForm
+      initialData={initialData}
+      onSubmit={handleSubmit}
+      isSubmitting={isSubmitting}
     />
   );
 }
