@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { Plus, Edit, ExternalLink, Search } from "lucide-react";
 import connectDB from "@/lib/mongodb";
