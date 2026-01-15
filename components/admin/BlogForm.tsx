@@ -36,7 +36,7 @@ export interface BlogFormData {
   ogImage: string;
   canonical: string;
   isPublished: boolean;
-  noIndex: boolean;
+  isSearchable: boolean;
 }
 
 interface BlogFormProps {
@@ -66,7 +66,7 @@ export default function BlogForm({
       ogImage: "",
       canonical: "",
       isPublished: false,
-      noIndex: false,
+      isSearchable: true,
     }
   );
 
@@ -445,8 +445,8 @@ export default function BlogForm({
               <label className="flex items-center gap-3 p-3 bg-red-50 rounded-2xl cursor-pointer">
                 <input
                   type="checkbox"
-                  name="noIndex"
-                  checked={formData.noIndex}
+                  name="isSearchable"
+                  checked={formData.isSearchable}
                   onChange={handleChange}
                   className="w-4 h-4 accent-red-600"
                 />

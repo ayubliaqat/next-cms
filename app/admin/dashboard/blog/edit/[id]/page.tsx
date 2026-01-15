@@ -1,46 +1,41 @@
 import { notFound } from "next/navigation";
-import connectDB from "@/lib/mongodb";
-import Blog from "@/models/Blog";
-import EditFormWrapper from "@/components/admin/EditFormWrapper"; // Adjust path
+import { getBlogPostById } from "@/app/actions/BlogActions";
+import EditFormWrapper from "@/components/admin/EditFormWrapper";
 
 interface EditPageProps {
-  params: Promise<{ id: string }>; // Change: define as a Promise
+  params: Promise<{ id: string }>;
 }
 
 export default async function EditBlogPostPage({ params }: EditPageProps) {
-  // FIX: Unwrapping the params before using them
-  const { id } = await params; 
+  // 1. Unwrap the params to get the ID
+  const { id } = await params;
 
-  await connectDB();
-  
-  // Now you use the unwrapped 'id'
-  const post = await Blog.findById(id).lean();
+  // 2. Fetch the post using our perfected Action
+  // This automatically flattens seo.metaTitle -> metaTitle
+  // and converts indexControl.isSearchable -> isSearchable
+  const post = await getBlogPostById(id);
 
+  // 3. Handle 404 if the post doesn't exist
   if (!post) {
     notFound();
   }
 
-  // Transform database data back for the form
-  const initialData = {
-    title: post.title,
-    slug: post.slug,
-    excerpt: post.excerpt,
-    content: post.content,
-    category: post.category,
-    author: post.author,
-    coverImage: post.coverImage,
-    metaTitle: post.seo?.metaTitle || "",
-    metaDescription: post.seo?.metaDescription || "",
-    keywords: post.seo?.keywords?.join(", ") || "", 
-    ogImage: post.seo?.ogImage || "",
-    canonical: post.seo?.canonical || "",
-    noIndex: !post.indexControl?.isSearchable,
-    isPublished: post.isPublished || false,
-  };
-
   return (
-    <div className="min-h-screen bg-slate-50/50 p-6">
-      <EditFormWrapper id={id} initialData={initialData} />
-    </div>
+    <main className="min-h-screen bg-slate-50/50">
+      <div className="max-w-7xl mx-auto py-12 px-6">
+        {/* Header Section */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">
+            Edit Story
+          </h1>
+          <p className="text-slate-500 font-medium">
+            Refining: <span className="text-blue-600">{post.title}</span>
+          </p>
+        </div>
+
+        {/* 4. Pass the already-flattened post data to the Wrapper */}
+        <EditFormWrapper id={id} initialData={post} />
+      </div>
+    </main>
   );
 }

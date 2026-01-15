@@ -1,5 +1,8 @@
 
 export type BlogCategory = 
+  'Sustainability'
+  | 'Organic Living'
+  | 'Urban Leaf Tips'
   | 'Health Benefits' 
   | 'Recipes' 
   | 'Sourcing Stories' 

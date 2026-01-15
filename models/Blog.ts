@@ -46,11 +46,11 @@ const BlogSchema = new Schema<IBlogPost>(
     // --- MEDIA & BODY ---
     coverImage: {
       type: String,
-      required: [true, "A cover image is required"],
+      required: [false, "A cover image is required"],
     },
     excerpt: {
       type: String,
-      required: true,
+      required: false,
       maxlength: 200,
     },
     content: {
@@ -102,5 +102,6 @@ if (process.env.NODE_ENV === "development") {
   delete mongoose.models.Blog;
 }
 
-const Blog = models.Blog || model<IBlogPost>("Blog", BlogSchema);
+// The third argument "blogs" forces Mongoose to talk to the exact folder in your screenshot
+const Blog = models.Blog || model<IBlogPost>("Blog", BlogSchema, "blogs");
 export default Blog;
